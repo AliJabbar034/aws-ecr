@@ -11,36 +11,21 @@ jobs:
 
     steps:
       - name: Checkout code
-
         uses: actions/checkout@v3
 
       - name: Log in to Amazon ECR
-
         id: login-ecr
-
         uses: aws-actions/amazon-ecr-login@v1
-
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-          aws-region: ${{ secrets.AWS_REGION }}
+          region: ${{ secrets.AWS_REGION }}
 
       - name: Build and tag Docker image
-
         run: |
-
           IMAGE_TAG=${{ secrets.IMAGE_TAG || 'latest' }}
-
           docker build -t ${{ secrets.ECR_REPOSITORY }}:${IMAGE_TAG} .
-
           docker tag ${{ secrets.ECR_REPOSITORY }}:${IMAGE_TAG} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${IMAGE_TAG}
 
       - name: Push Docker image to Amazon ECR
-
         run: |
-
           IMAGE_TAG=${{ secrets.IMAGE_TAG || 'latest' }}
-
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${IMAGE_TAG}
