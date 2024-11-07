@@ -28,7 +28,9 @@ app.listen(PORT, async () => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello from container");
+  res.status(200).json({
+    message: "Success",
+  });
 });
 
 app.get("/health", (req, res) => {
