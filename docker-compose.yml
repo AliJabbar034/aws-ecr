@@ -1,0 +1,27 @@
+services:
+  web:
+    build: .
+    container_name: node-web
+    ports:
+      - 3000:3000
+    environment:
+      - USERNAME=root
+      - PASSWORD=example
+      - DATABASE=mongoDatabase
+      - MONGOPORT=27017
+      - HOST=db
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+
+    volumes:
+      - db-data:/data/db # Mounting the volume
+
+volumes:
+  db-data: # Defining the volume at the bottom
